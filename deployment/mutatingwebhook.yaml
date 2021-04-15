@@ -20,6 +20,6 @@ webhooks:
     namespaceSelector:
       matchExpressions:
         # key exist
-        - key: ds-parent-namespace
+        - key: jiexun-test-key
           operator: Exists
     timeoutSeconds: 5
