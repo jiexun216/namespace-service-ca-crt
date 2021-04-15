@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: namespace-service-ca-crt-deployment
+  labels:
+    app: namespace-service-ca-crt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: namespace-service-ca-crt
+  template:
+    metadata:
+      labels:
+        app: namespace-service-ca-crt
+    spec:
+      serviceAccount: namespace-service-ca-crt-sa
+      containers:
+        - name: namespace-service-ca-crt
+          image: daocloud.io/daocloud/namespace-service-ca-crt:latest
+          imagePullPolicy: Always
+          args:
+            - -tlsCertFile=/etc/webhook/certs/cert.pem
+            - -tlsKeyFile=/etc/webhook/certs/key.pem
+            - -alsologtostderr
+            - -v=4
+            - 2>&1
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: namespace-service-ca-crt-certs

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: namespace-service-ca-crt-svc
+  labels:
+    app: namespace-service-ca-crt
+spec:
+  ports:
+  - port: 443
+    targetPort: 443
+  selector:
+    app: namespace-service-ca-crt

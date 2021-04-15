@@ -1,0 +1,25 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: mutating-webhook-namespace-service-ca-crt-cfg
+  labels:
+    app: namespace-service-ca-crt
+webhooks:
+  - name: mutating-namespace-service-ca-crt.datacreating.com
+    clientConfig:
+      service:
+        name: namespace-service-ca-crt-svc
+        namespace: jiexun-test
+        path: "/mutate"
+      caBundle: ${CA_BUNDLE}
+    rules:
+      - operations: ["CREATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["secrets"]
+    namespaceSelector:
+      matchExpressions:
+        # key exist
+        - key: ds-parent-namespace
+          operator: Exists
+    timeoutSeconds: 5
